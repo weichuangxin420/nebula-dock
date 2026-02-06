@@ -19,6 +19,11 @@ Open `http://localhost:3000` in your browser.
 
 - `GET /api/status`
   - Returns uptime, server time, palette hints, and notes count.
+- `GET /api/cli/commands`
+  - Returns the allowlist of server-side commands.
+- `POST /api/cli/run`
+  - Body: `{ "commandId": "project-status" }`
+  - Executes an allowlisted command and returns output.
 - `GET /api/notes`
   - Returns the latest notes.
 - `POST /api/notes`

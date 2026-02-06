@@ -13,110 +13,145 @@
       <span class="glow g3"></span>
     </div>
 
-    <header class="topbar">
-      <div class="brand">
-        <span class="dot"></span>
-        <span>Nebula Dock</span>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <span class="dot"></span>
+          <div>
+            <div class="brand-title">Nebula Dock</div>
+            <div class="brand-sub">Noon Edition</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/">主页</a>
+          <a href="/#overview">概览</a>
+          <a href="/#design">设计</a>
+          <a href="/#showcase">展示</a>
+          <a href="/#notes">便笺</a>
+          <a class="active agent-link" href="/agent">Agent</a>
+        </nav>
+        <div class="sidebar-foot">Agent · 控制室</div>
+      </aside>
+
+      <div class="app-content">
+        <header class="topbar">
+          <div class="topbar-title">Agent 控制室</div>
+          <div class="topbar-actions">
+            <button class="ghost" data-agent-sync>刷新状态</button>
+          </div>
+        </header>
+
+        <main>
+          <section class="agent-hero">
+            <div class="agent-copy">
+              <p class="eyebrow">Agent / 控制室</p>
+              <h1>把目标变成可以执行的秩序。</h1>
+              <p class="lead">
+                这里是一个灵感入口：输入目标，生成一份可执行的工作序列。它并不连接
+                真正的自动化系统，但可以帮助你把想法落到步骤上。
+              </p>
+              <div class="agent-meta">
+                <div class="meta-card">
+                  <span class="label">系统状态</span>
+                  <span class="value" data-agent-status>同步中...</span>
+                </div>
+                <div class="meta-card">
+                  <span class="label">服务器时间</span>
+                  <span class="value" data-agent-time>--:--</span>
+                </div>
+              </div>
+            </div>
+            <div class="agent-panel">
+              <div class="panel-head">
+                <h2>Agent 任务面板</h2>
+                <p>输入你想做的事，生成一个清晰的行动列表。</p>
+              </div>
+              <div class="agent-input">
+                <input
+                  type="text"
+                  placeholder="例如：做一个苹果风格的产品发布页"
+                  data-agent-goal
+                />
+                <button class="primary" data-agent-generate>生成计划</button>
+              </div>
+              <div class="agent-chips">
+                <button class="chip" data-agent-chip="优化网站首页体验">优化网站首页体验</button>
+                <button class="chip" data-agent-chip="设计一个产品发布页">设计一个产品发布页</button>
+                <button class="chip" data-agent-chip="增加一个数据看板">增加一个数据看板</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="agent-grid">
+            <div class="agent-card">
+              <div class="card-header">
+                <span>执行序列</span>
+                <span class="pill">模拟</span>
+              </div>
+              <ol class="plan-list" data-agent-plan>
+                <li class="muted">生成后会出现在这里。</li>
+              </ol>
+            </div>
+            <div class="agent-card">
+              <div class="card-header">
+                <span>输出预览</span>
+                <span class="pill">Draft</span>
+              </div>
+              <div class="agent-output" data-agent-output>
+                <p class="muted">等待输入目标。</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="terminal-section">
+            <div class="section-head">
+              <h2>命令行模块</h2>
+              <p>通过安全白名单执行服务器命令，输出结果会在这里展示。</p>
+            </div>
+            <div class="terminal">
+              <div class="terminal-controls">
+                <select data-cli-select>
+                  <option>加载命令列表...</option>
+                </select>
+                <button class="primary" data-cli-run>运行命令</button>
+              </div>
+              <div class="terminal-output" data-cli-output>
+                <pre class="muted">等待执行。</pre>
+              </div>
+              <div class="terminal-meta" data-cli-meta>仅允许执行预设命令（安全白名单）。</div>
+            </div>
+          </section>
+
+          <section class="agent-story">
+            <div class="section-head">
+              <h2>为什么保留这个入口？</h2>
+              <p>
+                你可能暂时没有明确要做什么，但一个“入口”可以让想法有地方着陆。
+                这里的设计强调节奏与秩序，方便你随时把构想翻译成行动。
+              </p>
+            </div>
+            <div class="story-grid">
+              <div class="story-card">
+                <h3>清晰目标</h3>
+                <p>输入一句话，系统就会生成结构化的执行路径。</p>
+              </div>
+              <div class="story-card">
+                <h3>高密度输出</h3>
+                <p>把抽象的想法转换成可执行的步骤与产出。</p>
+              </div>
+              <div class="story-card">
+                <h3>可扩展</h3>
+                <p>未来可以接入真实的自动化或数据接口。</p>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer>
+          <span>Nebula Dock · Agent 入口</span>
+        </footer>
       </div>
-      <nav class="nav">
-        <a href="/">主页</a>
-        <a href="/#design">设计</a>
-        <a href="/agent">Agent</a>
-        <a href="/#notes">便笺</a>
-      </nav>
-      <button class="ghost" data-agent-sync>刷新状态</button>
-    </header>
-
-    <main>
-      <section class="agent-hero">
-        <div class="agent-copy">
-          <p class="eyebrow">Agent / 控制室</p>
-          <h1>把目标变成可以执行的秩序。</h1>
-          <p class="lead">
-            这里是一个灵感入口：输入目标，生成一份可执行的工作序列。它并不连接
-            真正的自动化系统，但可以帮助你把想法落到步骤上。
-          </p>
-          <div class="agent-meta">
-            <div class="meta-card">
-              <span class="label">系统状态</span>
-              <span class="value" data-agent-status>同步中...</span>
-            </div>
-            <div class="meta-card">
-              <span class="label">服务器时间</span>
-              <span class="value" data-agent-time>--:--</span>
-            </div>
-          </div>
-        </div>
-        <div class="agent-panel">
-          <div class="panel-head">
-            <h2>Agent 任务面板</h2>
-            <p>输入你想做的事，生成一个清晰的行动列表。</p>
-          </div>
-          <div class="agent-input">
-            <input
-              type="text"
-              placeholder="例如：做一个苹果风格的产品发布页"
-              data-agent-goal
-            />
-            <button class="primary" data-agent-generate>生成计划</button>
-          </div>
-          <div class="agent-chips">
-            <button class="chip" data-agent-chip="优化网站首页体验">优化网站首页体验</button>
-            <button class="chip" data-agent-chip="设计一个产品发布页">设计一个产品发布页</button>
-            <button class="chip" data-agent-chip="增加一个数据看板">增加一个数据看板</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="agent-grid">
-        <div class="agent-card">
-          <div class="card-header">
-            <span>执行序列</span>
-            <span class="pill">模拟</span>
-          </div>
-          <ol class="plan-list" data-agent-plan>
-            <li class="muted">生成后会出现在这里。</li>
-          </ol>
-        </div>
-        <div class="agent-card">
-          <div class="card-header">
-            <span>输出预览</span>
-            <span class="pill">Draft</span>
-          </div>
-          <div class="agent-output" data-agent-output>
-            <p class="muted">等待输入目标。</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="agent-story">
-        <div class="section-head">
-          <h2>为什么保留这个入口？</h2>
-          <p>
-            你可能暂时没有明确要做什么，但一个“入口”可以让想法有地方着陆。
-            这里的设计强调节奏与秩序，方便你随时把构想翻译成行动。
-          </p>
-        </div>
-        <div class="story-grid">
-          <div class="story-card">
-            <h3>清晰目标</h3>
-            <p>输入一句话，系统就会生成结构化的执行路径。</p>
-          </div>
-          <div class="story-card">
-            <h3>高密度输出</h3>
-            <p>把抽象的想法转换成可执行的步骤与产出。</p>
-          </div>
-          <div class="story-card">
-            <h3>可扩展</h3>
-            <p>未来可以接入真实的自动化或数据接口。</p>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <span>Nebula Dock · Agent 入口</span>
-    </footer>
+    </div>
 
     <script src="/agent.js" defer></script>
   </body>

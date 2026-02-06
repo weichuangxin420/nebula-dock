@@ -1,11 +1,51 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { execFile } = require('child_process');
 
 const PORT = process.env.PORT || 3000;
 const publicDir = path.join(__dirname, 'public');
 const dataDir = path.join(__dirname, 'data');
 const notesFile = path.join(dataDir, 'notes.json');
+
+const cliCommands = {
+  'project-status': {
+    label: '项目状态',
+    description: 'git status -sb',
+    cmd: 'git',
+    args: ['status', '-sb'],
+  },
+  'list-root': {
+    label: '根目录列表',
+    description: 'ls -la',
+    cmd: 'ls',
+    args: ['-la'],
+  },
+  'list-public': {
+    label: 'public 目录',
+    description: 'ls -la public',
+    cmd: 'ls',
+    args: ['-la', 'public'],
+  },
+  'node-version': {
+    label: 'Node 版本',
+    description: 'node --version',
+    cmd: 'node',
+    args: ['--version'],
+  },
+  'disk-usage': {
+    label: '磁盘占用',
+    description: 'df -h',
+    cmd: 'df',
+    args: ['-h'],
+  },
+  uptime: {
+    label: '系统运行时间',
+    description: 'uptime',
+    cmd: 'uptime',
+    args: [],
+  },
+};
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -77,6 +117,59 @@ function readJsonBody(req, limitBytes = 10 * 1024) {
   });
 }
 
+function trimOutput(value, maxLength = 8000) {
+  if (!value) return '';
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength)}\n... 输出已截断`;
+}
+
+function listCliCommands() {
+  return Object.entries(cliCommands).map(([id, command]) => ({
+    id,
+    label: command.label,
+    description: command.description,
+  }));
+}
+
+function runCliCommand(commandId) {
+  const command = cliCommands[commandId];
+  if (!command) {
+    return Promise.resolve({ ok: false, error: '命令不存在' });
+  }
+
+  return new Promise((resolve) => {
+    const startedAt = Date.now();
+    execFile(
+      command.cmd,
+      command.args,
+      { cwd: __dirname, timeout: 4000, maxBuffer: 64 * 1024 },
+      (error, stdout, stderr) => {
+        const durationMs = Date.now() - startedAt;
+        if (error && error.code === 'ENOENT') {
+          return resolve({ ok: false, error: '命令不可用' });
+        }
+        if (error && error.killed) {
+          return resolve({ ok: false, error: '命令超时' });
+        }
+
+        const exitCode = typeof error?.code === 'number' ? error.code : 0;
+        resolve({
+          ok: true,
+          result: {
+            commandId,
+            label: command.label,
+            stdout: trimOutput(stdout),
+            stderr: trimOutput(stderr),
+            exitCode,
+            durationMs,
+            ranAt: new Date().toISOString(),
+          },
+        });
+      }
+    );
+  });
+}
+
 async function handleApi(req, res, pathname) {
   if (pathname === '/api/status' && req.method === 'GET') {
     return sendJson(res, 200, {
@@ -87,6 +180,33 @@ async function handleApi(req, res, pathname) {
       notesCount: notes.length,
       palette: ['aurora', 'ink', 'sunrise', 'citrine'],
     });
+  }
+
+  if (pathname === '/api/cli/commands' && req.method === 'GET') {
+    return sendJson(res, 200, { ok: true, commands: listCliCommands() });
+  }
+
+  if (pathname === '/api/cli/run' && req.method === 'POST') {
+    try {
+      const payload = await readJsonBody(req);
+      const commandId = typeof payload.commandId === 'string' ? payload.commandId.trim() : '';
+
+      if (!commandId) {
+        return sendJson(res, 400, { ok: false, error: 'commandId 不能为空' });
+      }
+
+      const result = await runCliCommand(commandId);
+      if (!result.ok) {
+        return sendJson(res, 400, { ok: false, error: result.error });
+      }
+
+      return sendJson(res, 200, { ok: true, result: result.result });
+    } catch (error) {
+      if (error && error.status) {
+        return sendJson(res, error.status, { ok: false, error: error.message });
+      }
+      return sendJson(res, 500, { ok: false, error: '服务器错误' });
+    }
   }
 
   if (pathname === '/api/notes') {
