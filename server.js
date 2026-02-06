@@ -153,7 +153,12 @@ function createServer() {
       return;
     }
 
-    const requestPath = pathname === '/' ? '/index.html' : pathname;
+    let requestPath = pathname;
+    if (pathname === '/') {
+      requestPath = '/index.html';
+    } else if (pathname === '/agent' || pathname === '/agent/') {
+      requestPath = '/agent.html';
+    }
     const absolutePath = path.join(publicDir, requestPath);
     const normalizedPath = path.normalize(absolutePath);
 

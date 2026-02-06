@@ -10,6 +10,11 @@ npm run dev
 
 Open `http://localhost:3000` in your browser.
 
+## Pages
+
+- `/` — Main landing page.
+- `/agent` — Agent control room (idea-to-plan prototype).
+
 ## API
 
 - `GET /api/status`
