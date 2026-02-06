@@ -10,6 +10,7 @@ const cliSelect = document.querySelector('[data-cli-select]');
 const cliRunBtn = document.querySelector('[data-cli-run]');
 const cliOutput = document.querySelector('[data-cli-output]');
 const cliMeta = document.querySelector('[data-cli-meta]');
+const cliInput = document.querySelector('[data-cli-input]');
 
 let cliCommands = [];
 
@@ -138,24 +139,31 @@ function renderCliCommands(commands) {
     return;
   }
 
-  cliSelect.innerHTML = commands
-    .map(
-      (command) =>
-        `<option value="${escapeHtml(command.id)}">${escapeHtml(command.label)}</option>`
-    )
-    .join('');
+  const options = [
+    '<option value="">选择预设命令（可编辑输入框）</option>',
+    ...commands.map((command) => {
+      const label = command.description
+        ? `${command.label} · ${command.description}`
+        : command.label;
+      const value = command.command || command.id;
+      return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+    }),
+  ];
+
+  cliSelect.innerHTML = options.join('');
 }
 
 function renderCliOutput(result) {
   if (!cliOutput) return;
   const stdout = result.stdout || '';
   const stderr = result.stderr || '';
-  const output = stdout || stderr || '无输出。';
+  const output = [stdout, stderr].filter(Boolean).join('\n') || '无输出。';
   cliOutput.innerHTML = `<pre>${escapeHtml(output)}</pre>`;
 
   if (cliMeta) {
     const parts = [];
     if (result.label) parts.push(result.label);
+    if (!result.label && result.command) parts.push(result.command);
     if (typeof result.exitCode === 'number') parts.push(`exit ${result.exitCode}`);
     if (result.durationMs) parts.push(`${result.durationMs}ms`);
     cliMeta.textContent = parts.join(' · ') || '执行完成';
@@ -173,6 +181,12 @@ async function loadCliCommands() {
     }
     cliCommands = data.commands || [];
     renderCliCommands(cliCommands);
+    if (cliInput && cliCommands.length) {
+      const first = cliCommands[0];
+      if (first?.command) {
+        cliInput.value = first.command;
+      }
+    }
   } catch (error) {
     cliSelect.innerHTML = '<option>命令加载失败</option>';
     if (cliMeta) cliMeta.textContent = '无法获取命令列表';
@@ -180,9 +194,11 @@ async function loadCliCommands() {
 }
 
 async function runCliCommand() {
-  if (!cliSelect || !cliOutput) return;
-  const commandId = cliSelect.value;
-  if (!commandId) return;
+  if (!cliOutput) return;
+  const command = cliInput ? cliInput.value.trim() : '';
+  const fallback = cliSelect ? cliSelect.value : '';
+  const commandToRun = command || fallback;
+  if (!commandToRun) return;
 
   if (cliRunBtn) cliRunBtn.disabled = true;
   cliOutput.innerHTML = '<pre>执行中...</pre>';
@@ -192,7 +208,7 @@ async function runCliCommand() {
     const response = await fetch('/api/cli/run', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ commandId }),
+      body: JSON.stringify({ command: commandToRun }),
     });
     const data = await response.json();
     if (!data.ok) {
@@ -246,6 +262,15 @@ if (syncBtn) {
 
 if (cliRunBtn) {
   cliRunBtn.addEventListener('click', runCliCommand);
+}
+
+if (cliSelect && cliInput) {
+  cliSelect.addEventListener('change', () => {
+    const value = cliSelect.value;
+    if (value) {
+      cliInput.value = value;
+    }
+  });
 }
 
 refreshStatus();

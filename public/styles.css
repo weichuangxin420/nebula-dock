@@ -806,6 +806,16 @@ h1 {
   font-size: 0.95rem;
 }
 
+.terminal-controls input {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(11, 15, 22, 0.2);
+  background: #fff;
+  font-size: 0.95rem;
+}
+
 .terminal-output {
   background: #0b0f16;
   color: #e9eef6;

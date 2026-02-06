@@ -113,12 +113,19 @@
                 <select data-cli-select>
                   <option>加载命令列表...</option>
                 </select>
+                <input
+                  type="text"
+                  placeholder="输入任意命令，例如：ls -la"
+                  data-cli-input
+                />
                 <button class="primary" data-cli-run>运行命令</button>
               </div>
               <div class="terminal-output" data-cli-output>
                 <pre class="muted">等待执行。</pre>
               </div>
-              <div class="terminal-meta" data-cli-meta>仅允许执行预设命令（安全白名单）。</div>
+              <div class="terminal-meta" data-cli-meta>
+                本地模式：支持执行任意命令，请谨慎使用。
+              </div>
             </div>
           </section>
 

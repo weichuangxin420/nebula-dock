@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { execFile } = require('child_process');
+const { exec } = require('child_process');
 
 const PORT = process.env.PORT || 3000;
 const publicDir = path.join(__dirname, 'public');
@@ -12,38 +12,32 @@ const cliCommands = {
   'project-status': {
     label: '项目状态',
     description: 'git status -sb',
-    cmd: 'git',
-    args: ['status', '-sb'],
+    command: 'git status -sb',
   },
   'list-root': {
     label: '根目录列表',
     description: 'ls -la',
-    cmd: 'ls',
-    args: ['-la'],
+    command: 'ls -la',
   },
   'list-public': {
     label: 'public 目录',
     description: 'ls -la public',
-    cmd: 'ls',
-    args: ['-la', 'public'],
+    command: 'ls -la public',
   },
   'node-version': {
     label: 'Node 版本',
     description: 'node --version',
-    cmd: 'node',
-    args: ['--version'],
+    command: 'node --version',
   },
   'disk-usage': {
     label: '磁盘占用',
     description: 'df -h',
-    cmd: 'df',
-    args: ['-h'],
+    command: 'df -h',
   },
   uptime: {
     label: '系统运行时间',
     description: 'uptime',
-    cmd: 'uptime',
-    args: [],
+    command: 'uptime',
   },
 };
 
@@ -128,26 +122,28 @@ function listCliCommands() {
     id,
     label: command.label,
     description: command.description,
+    command: command.command,
   }));
 }
 
-function runCliCommand(commandId) {
-  const command = cliCommands[commandId];
+function runCliCommand(commandInput) {
+  const command = commandInput.trim();
   if (!command) {
-    return Promise.resolve({ ok: false, error: '命令不存在' });
+    return Promise.resolve({ ok: false, error: '命令不能为空' });
   }
 
   return new Promise((resolve) => {
     const startedAt = Date.now();
-    execFile(
-      command.cmd,
-      command.args,
-      { cwd: __dirname, timeout: 4000, maxBuffer: 64 * 1024 },
+    exec(
+      command,
+      {
+        cwd: __dirname,
+        timeout: 8000,
+        maxBuffer: 256 * 1024,
+        shell: '/bin/zsh',
+      },
       (error, stdout, stderr) => {
         const durationMs = Date.now() - startedAt;
-        if (error && error.code === 'ENOENT') {
-          return resolve({ ok: false, error: '命令不可用' });
-        }
         if (error && error.killed) {
           return resolve({ ok: false, error: '命令超时' });
         }
@@ -156,8 +152,7 @@ function runCliCommand(commandId) {
         resolve({
           ok: true,
           result: {
-            commandId,
-            label: command.label,
+            command,
             stdout: trimOutput(stdout),
             stderr: trimOutput(stderr),
             exitCode,
@@ -190,12 +185,19 @@ async function handleApi(req, res, pathname) {
     try {
       const payload = await readJsonBody(req);
       const commandId = typeof payload.commandId === 'string' ? payload.commandId.trim() : '';
+      const command = typeof payload.command === 'string' ? payload.command.trim() : '';
 
-      if (!commandId) {
-        return sendJson(res, 400, { ok: false, error: 'commandId 不能为空' });
+      let commandToRun = command;
+      if (!commandToRun && commandId) {
+        const preset = cliCommands[commandId];
+        commandToRun = preset?.command || '';
       }
 
-      const result = await runCliCommand(commandId);
+      if (!commandToRun) {
+        return sendJson(res, 400, { ok: false, error: '命令不能为空' });
+      }
+
+      const result = await runCliCommand(commandToRun);
       if (!result.ok) {
         return sendJson(res, 400, { ok: false, error: result.error });
       }
