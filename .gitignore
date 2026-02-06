@@ -10,6 +10,7 @@ pnpm-debug.log*
 
 # Runtime data
 /data/notes.json
+/data/llm/
 
 # Editor / OS
 .DS_Store
