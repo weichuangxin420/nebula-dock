@@ -1,0 +1,13 @@
+{
+  "name": "nebula-dock",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Simple Node.js frontend + backend starter",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node -e \"console.log('No automated tests yet')\""
+  },
+  "license": "MIT"
+}

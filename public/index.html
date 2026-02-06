@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nebula Dock · 正午版</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient">
+      <span class="glow g1"></span>
+      <span class="glow g2"></span>
+      <span class="glow g3"></span>
+    </div>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="dot"></span>
+        <span>Nebula Dock</span>
+      </div>
+      <nav class="nav">
+        <a href="#overview">概览</a>
+        <a href="#design">设计</a>
+        <a href="#showcase">展示</a>
+        <a href="#notes">便笺</a>
+        <a href="#specs">规格</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="ghost" data-refresh>同步</button>
+    </header>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">正午 / 12:00</p>
+          <h1>正午般的清晰与秩序。</h1>
+          <p class="lead">
+            Nebula Dock 是一个极简的 Node.js 前后端样板：一页克制的主页、
+            一个稳定的状态 API，以及持续同步的共享便笺流。
+          </p>
+          <div class="hero-actions">
+            <button class="primary" data-refresh>刷新状态</button>
+            <span class="status" data-status>等待同步...</span>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <span class="label">运行时间</span>
+              <span class="value" data-uptime>--</span>
+            </div>
+            <div class="stat">
+              <span class="label">便笺数</span>
+              <span class="value" data-notes-count>--</span>
+            </div>
+            <div class="stat">
+              <span class="label">服务器时间</span>
+              <span class="value" data-server-time>--</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="slab"></div>
+          <div class="glass-card">
+            <div class="card-header">
+              <span>Dock 记录</span>
+              <span class="pill">实时</span>
+            </div>
+            <ul class="log" data-log>
+              <li>正在加载记录...</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="highlights reveal" id="design">
+        <div class="highlight">
+          <h2>层级更精准</h2>
+          <p>
+            留白、尺度与字重构成清晰序列，让信息像正午阳光一样直接明亮。
+          </p>
+        </div>
+        <div class="highlight">
+          <h2>材质与光感</h2>
+          <p>
+            柔和渐变与玻璃层叠出深度，保持轻盈与高级感。
+          </p>
+        </div>
+        <div class="highlight">
+          <h2>动效克制</h2>
+          <p>
+            细微的抬升与呼吸动效引导视线，同时保持性能干净利落。
+          </p>
+        </div>
+      </section>
+
+      <section class="showcase" id="showcase">
+        <div class="section-head reveal">
+          <h2>正午光场 · Dock 展示</h2>
+          <p>
+            统一的材质和视觉语言，让功能页面也像产品发布一样精致。
+          </p>
+        </div>
+        <div class="showcase-grid">
+          <div class="device reveal">
+            <div class="device-shell"></div>
+            <div class="device-screen">
+              <div class="screen-glow"></div>
+              <div class="screen-row"></div>
+              <div class="screen-row"></div>
+              <div class="screen-row"></div>
+              <div class="screen-chart"></div>
+            </div>
+          </div>
+          <div class="showcase-copy reveal">
+            <h3>沉静、克制、可持续扩展</h3>
+            <p>
+              Dock 以极低的结构成本提供完整体验：状态同步、便笺记录、模块化
+              扩展。每个组件都可以直接复用到真实产品。
+            </p>
+            <div class="point-list">
+              <div class="point">
+                <span class="point-title">统一视觉</span>
+                <span>主次层级清晰，信息焦点极度稳定。</span>
+              </div>
+              <div class="point">
+                <span class="point-title">统一交互</span>
+                <span>按钮、卡片、列表保持一致的触感。</span>
+              </div>
+              <div class="point">
+                <span class="point-title">统一数据</span>
+                <span>API 与 UI 的每条路径可直接扩展。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="experience" id="experience">
+        <div class="section-head reveal">
+          <h2>体验分镜</h2>
+          <p>像产品发布页一样拆解功能，用更高密度的叙事方式表达。</p>
+        </div>
+        <div class="experience-grid">
+          <article class="experience-card reveal">
+            <h3>主控视图</h3>
+            <p>信息集中于首屏，状态、便笺、性能指标一目了然。</p>
+          </article>
+          <article class="experience-card reveal">
+            <h3>中枢同步</h3>
+            <p>前后端互相反馈，视觉状态与真实数据保持一致。</p>
+          </article>
+          <article class="experience-card reveal">
+            <h3>可拓展模块</h3>
+            <p>在不破坏主视觉的前提下新增模块，系统仍保持秩序。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="notes reveal" id="notes">
+        <div class="notes-head">
+          <h2>现场便笺</h2>
+          <p>
+            发送一条短便笺到 Dock。后端将其写入本地 JSON 并立即回传。
+          </p>
+        </div>
+        <form class="note-form" data-note-form>
+          <input
+            type="text"
+            name="note"
+            placeholder="写一条短便笺（最多 200 字）"
+            maxlength="200"
+            required
+          />
+          <button type="submit">发送便笺</button>
+        </form>
+        <ul class="notes-list" data-notes>
+          <li class="muted">正在加载便笺...</li>
+        </ul>
+      </section>
+
+      <section class="specs" id="specs">
+        <div class="spec-card reveal">
+          <h3>API 面</h3>
+          <p>GET /api/status • GET/POST /api/notes</p>
+        </div>
+        <div class="spec-card reveal">
+          <h3>存储</h3>
+          <p>本地 JSON 文件 • 保留最近 50 条便笺</p>
+        </div>
+        <div class="spec-card reveal">
+          <h3>延迟</h3>
+          <p>面向轻量请求与快速刷新优化</p>
+        </div>
+      </section>
+
+      <section class="faq" id="faq">
+        <div class="section-head reveal">
+          <h2>常见问题</h2>
+          <p>快速说明该页面结构和后端扩展方式。</p>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item reveal">
+            <h3>可以接入数据库吗？</h3>
+            <p>可以，直接把 notes 的读写逻辑替换为 SQLite 或 MongoDB。</p>
+          </div>
+          <div class="faq-item reveal">
+            <h3>如何增加模块？</h3>
+            <p>新增一个 section + 接口即可，视觉层保持同一材质体系。</p>
+          </div>
+          <div class="faq-item reveal">
+            <h3>如何部署？</h3>
+            <p>用 PM2 或 Docker 启动服务，静态资源无需构建。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta reveal">
+        <div>
+          <h2>准备好把它变成你的产品页面。</h2>
+          <p>保持克制，放大重点，把节奏交给内容本身。</p>
+        </div>
+        <button class="primary">开始扩展</button>
+      </section>
+    </main>
+
+    <footer>
+      <span>Node.js + 静态前端 • Apple 风格正午质感</span>
+    </footer>
+
+    <script src="/main.js" defer></script>
+  </body>
+</html>
